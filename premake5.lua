@@ -15,11 +15,18 @@ project "rge_fio"
 	targetname "rge_fio"
 	targetdir "bin/%{cfg.buildcfg}"
 
-	configuration { "linux", "gmake" }
+	defines { "Z_SOLO" }
+
+	configuration { "gmake" }
 		linkoptions { '-static-libstdc++', '-static-libgcc' }
 		entrypoint ("main")
 
-	defines { "Z_SOLO" }
+	configuration { "vs*" }
+		characterset ("MBCS")
+		toolset ("v141_xp")
+		links { "legacy_stdio_definitions" }
+		linkoptions { "/SAFESEH:NO" }
+		defines { "WIN32_LEAN_AND_MEAN", "_CRT_SECURE_NO_WARNINGS", "_CRT_NONSTDC_NO_DEPRECATE", "_USE_32BIT_TIME_T" }
 
 	filter "configurations:Debug"
 		defines { "DEBUG" }

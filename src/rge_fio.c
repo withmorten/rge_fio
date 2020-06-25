@@ -145,6 +145,16 @@ int32 rge_close(handle handle)
 	return -1;
 }
 
+void rge_fast_forward(handle handle, int32 size)
+{
+	if (handle != INVALID_HANDLE && handle == current_handle)
+	{
+		if (file_size) file_size -= size;
+
+		_lseek(handle, size, SEEK_CUR);
+	}
+}
+
 void rge_read_uncompressed(handle handle, void *data, int32 size)
 {
 	if (handle != INVALID_HANDLE && handle == current_handle)

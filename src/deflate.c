@@ -81,7 +81,7 @@ int32 deflate_data(void *_wd, byte *in_buf_ofs, int32 in_buf_size, bool32 eof_fl
 		deflate_stream.next_in = data;
 		deflate_stream.avail_in = data_pos + 1;
 
-		deflate_code = deflateInit2(&deflate_stream, -1, Z_DEFLATED, -15, 9, Z_RLE);
+		deflate_code = deflateInit2(&deflate_stream, Z_DEFAULT_COMPRESSION, Z_DEFLATED, -15, 9, Z_DEFAULT_STRATEGY);
 
 		if (deflate_code != Z_OK)
 		{

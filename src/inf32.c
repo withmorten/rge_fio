@@ -4,12 +4,12 @@
 
 static void *zalloc(void *opaque, uint32 items, uint32 size)
 {
-	return rge_calloc(size, items);
+	return calloc(size, items);
 };
 
 static void zfree(void *opaque, void *address)
 {
-	rge_free(address);
+	free(address);
 }
 
 static z_stream inflate_stream = ZEROMEM;

@@ -4,34 +4,61 @@
 
 #include "defs.h"
 
+#define DEFLATE_MIN_MATCH 3
+#define DEFLATE_THRESHOLD (DEFLATE_MIN_MATCH - 1)
+#define DEFLATE_MAX_MATCH 258
+
+#define DEFLATE_DICT_BITS 15
+#define DEFLATE_HASH_BITS 13
+#define DEFLATE_SHIFT_BITS ((DEFLATE_HASH_BITS + (DEFLATE_MIN_MATCH - 1)) / DEFLATE_MIN_MATCH)
+#define DEFLATE_SECTOR_BITS 12
+
+#define DEFLATE_DICT_SIZE (1 << DEFLATE_DICT_BITS)
+#define DEFLATE_HASH_SIZE (1 << DEFLATE_HASH_BITS)
+#define DEFLATE_SECTOR_SIZE (1 << DEFLATE_SECTOR_BITS)
+
+#define DEFLATE_HASH_FLAG_1 0x8000
+#define DEFLATE_HASH_FLAG_2 0x7FFF
+
+#define DEFLATE_NEXT_MASK 0x7FFF
+
+#define DEFLATE_MAX_TOKENS 12288
+
+#define DEFLATE_NUM_SYMBOLS_1 288
+#define DEFLATE_NUM_SYMBOLS_2 32
+#define DEFLATE_NUM_SYMBOLS_3 19
+#define DEFLATE_MAX_SYMBOLS 288
+
+#define DEFLATE_NIL 0xFFFFui16
+
 typedef struct work_data work_data;
 
 struct work_data
 {
-	byte dict[37122];
-	uint16 hash[8192];
-	uint16 next[32768];
-	uint16 last[32768];
-	byte token_buf[36864];
+	byte dict[DEFLATE_DICT_SIZE + DEFLATE_SECTOR_SIZE + DEFLATE_MAX_MATCH];
+	uint16 hash[DEFLATE_HASH_SIZE];
+	uint16 next[DEFLATE_DICT_SIZE];
+	uint16 last[DEFLATE_DICT_SIZE];
+	byte token_buf[DEFLATE_MAX_TOKENS * 3];
 	byte *token_buf_ofs;
 	int32 token_buf_len;
-	uint32 flag_buf[384];
+	uint32 flag_buf[DEFLATE_MAX_TOKENS >> 5];
 	uint32 *flag_buf_ofs;
 	int32 flag_buf_left;
 	uint32 token_buf_start;
 	uint32 token_buf_end;
 	int32 token_buf_bytes;
-	int32 freq_1[288];
-	int32 freq_2[32];
-	int32 freq_3[19];
-	int32 size_1[288];
-	int32 size_2[32];
-	int32 size_3[19];
-	uint32 code_1[288];
-	uint32 code_2[32];
-	uint32 code_3[19];
-	int32 bundled_sizes[320];
-	int32 coded_sizes[320];
+	int32 freq_1[DEFLATE_NUM_SYMBOLS_1];
+	int32 freq_2[DEFLATE_NUM_SYMBOLS_2];
+	int32 freq_3[DEFLATE_NUM_SYMBOLS_3];
+	int32 size_1[DEFLATE_NUM_SYMBOLS_1];
+	int32 size_2[DEFLATE_NUM_SYMBOLS_2];
+	int32 size_3[DEFLATE_NUM_SYMBOLS_3];
+	uint32 code_1[DEFLATE_NUM_SYMBOLS_1];
+	uint32 code_2[DEFLATE_NUM_SYMBOLS_2];
+	uint32 code_3[DEFLATE_NUM_SYMBOLS_3];
+	int32 bundled_sizes[DEFLATE_NUM_SYMBOLS_1 + DEFLATE_NUM_SYMBOLS_2];
+	int32 coded_sizes[DEFLATE_NUM_SYMBOLS_1 + DEFLATE_NUM_SYMBOLS_2];
 	int32 *coded_sizes_end;
 	int32 used_lit_codes;
 	int32 used_dist_codes;

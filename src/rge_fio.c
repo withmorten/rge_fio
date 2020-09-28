@@ -183,17 +183,17 @@ void rge_read_full(handle handle, void **data, int32 *size)
 		{
 			flags = FLAG_INFLATE;
 
-			file_buffers = rge_malloc(file_size);
+			file_buffers = malloc(file_size);
 			_read(handle, file_buffers, file_size);
 
-			compression_buffers = rge_calloc(Inf32BufSize(), 1);
+			compression_buffers = calloc(Inf32BufSize(), 1);
 			compression_point = 0;
 		}
 
 		int32 code;
 		int32 data_size = 0;
 		size_t data_alloc = sizeof(buffers) * 16;
-		byte *data_ptr = rge_malloc(data_alloc);
+		byte *data_ptr = malloc(data_alloc);
 
 		do
 		{
@@ -205,7 +205,7 @@ void rge_read_full(handle handle, void **data, int32 *size)
 			if (data_size + temp_max > data_alloc)
 			{
 				size_t new_alloc = data_alloc * 2;
-				byte *new_data_ptr = rge_malloc(new_alloc);
+				byte *new_data_ptr = malloc(new_alloc);
 
 				memcpy(new_data_ptr, data_ptr, data_alloc);
 				rge_free(data_ptr);
@@ -238,10 +238,10 @@ void rge_read(handle handle, void *data, int32 size)
 		{
 			flags = FLAG_INFLATE;
 
-			file_buffers = rge_malloc(file_size);
+			file_buffers = malloc(file_size);
 			_read(handle, file_buffers, file_size);
 
-			compression_buffers = rge_calloc(Inf32BufSize(), 1);
+			compression_buffers = calloc(Inf32BufSize(), 1);
 			compression_point = 0;
 
 			temp_size = file_size;
@@ -291,8 +291,8 @@ void rge_write(handle handle, void *data, int32 size)
 		{
 			flags = FLAG_DEFLATE;
 
-			compression_buffers = rge_calloc(deflate_buf_size(), 1);
-			deflate_init(compression_buffers, DEFLATE_MAX_COMPARES_DEFAULT, DEFLATE_STRATEGY_DEFAULT, TRUE, buffers, sizeof(buffers), &rge_buffer_full);
+			compression_buffers = calloc(deflate_buf_size(), 1);
+			deflate_init(compression_buffers, DEFLATE_MAX_COMPARES_DEFAULT, DEFLATE_ALL_BLOCKS, TRUE, buffers, sizeof(buffers), &rge_buffer_full);
 		}
 
 		if (deflate_data(compression_buffers, (byte *)data, size, FALSE) == DEFLATE_ERROR) rge_write_error = TRUE;

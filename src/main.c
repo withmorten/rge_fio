@@ -12,7 +12,6 @@
 #define USAGE \
 "usage: rge_fio r/w <in> <out> [num uncompressed bytes at start] [offset from which to read/to write to]\n\n"
 
-
 int32 main(int32 argc, char **argv)
 {
 	if (argc < 4)
@@ -54,7 +53,7 @@ int32 main(int32 argc, char **argv)
 		if (argc == 5)
 		{
 			num_uncompressed_bytes = atoi(argv[4]);
-			void *uncompressed = rge_malloc(num_uncompressed_bytes);
+			void *uncompressed = malloc(num_uncompressed_bytes);
 
 			rge_read_uncompressed(h, uncompressed, num_uncompressed_bytes);
 
@@ -132,7 +131,7 @@ int32 main(int32 argc, char **argv)
 		size_t size = ftell(in) - pos;
 		fseek(in, pos, SEEK_SET);
 
-		void *data = rge_malloc(size);
+		void *data = malloc(size);
 
 		fread(data, size, 1, in);
 

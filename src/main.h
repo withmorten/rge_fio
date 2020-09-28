@@ -62,12 +62,11 @@ typedef int32 res_id;
 
 #define INVALID_HANDLE -1
 
+#define local static
+
 #define rge_fopen fopen
 #define rge_fclose(stream) { if (stream) { fclose(stream); } stream = NULL; }
 
-#define rge_malloc malloc
-#define rge_calloc calloc
-#define rge_realloc realloc
 #define rge_free(pblock) { free(pblock); pblock = NULL; }
 
 #define ever ;;

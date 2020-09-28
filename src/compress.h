@@ -7,11 +7,11 @@
 #define INFLATE_ERROR -2
 
 size_t Inf32BufSize();
-int32 Inf32Decode(byte *in_buf, size_t in_buf_ofs, size_t *in_buf_size, byte *out_buf, size_t out_buf_offset, size_t *out_buf_size, void *_wd, bool32 b);
+int32 Inf32Decode(byte *in_buf, size_t in_buf_ofs, size_t *in_buf_size, byte *out_buf, size_t out_buf_offset, size_t *out_buf_size, void *_wd, bool32 buffered);
 
-#define DEFLATE_STRATEGY_STATIC 0
-#define DEFLATE_STRATEGY_DYNAMIC 1
-#define DEFLATE_STRATEGY_DEFAULT 2
+#define DEFLATE_STATIC_BLOCKS 0
+#define DEFLATE_DYNAMIC_BLOCKS 1
+#define DEFLATE_ALL_BLOCKS 2
 
 #define DEFLATE_MAX_COMPARES_DEFAULT 75
 
